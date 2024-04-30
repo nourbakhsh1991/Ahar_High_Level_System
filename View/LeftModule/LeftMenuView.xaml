@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="AharHighLevel.View.LeftModule.LeftMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AharHighLevel.View.LeftModule"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactivity="http://prismlibrary.com/"
+             xmlns:viewModel="clr-namespace:AharHighLevel.ViewModel"
+             FontSize="16"
+             mc:Ignorable="d"
+             Name="LMV"
+             Height="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},Path=ActualHeight}">
+    <!--Background="{Binding Source={StaticResource WindowsLightGreen},ConverterParameter=.2,Converter={StaticResource BrushOpacityConverter}}"-->
+    <!--<ScrollViewer Grid.Row="2"
+                  Style="{StaticResource LeftScrollViewer}"
+                 >-->
+
+    <TreeView Grid.Row="0"
+              Height="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualHeight}"
+              ItemsSource="{Binding Forms}"
+              ScrollViewer.VerticalScrollBarVisibility="Visible"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+              x:Name="LVTree"
+              MinWidth="220">
+
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SelectedItemChanged">
+                <interactivity:InvokeCommandAction Command="{Binding ElementName=LMV,  Path=DataContext.OpenViewCommand}"
+                                                   CommandParameter="{Binding ElementName=LVTree, Path=SelectedItem}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <TreeView.Resources>
+            <Style TargetType="{x:Type ScrollViewer}"
+                   BasedOn="{StaticResource LeftScrollViewer}">
+            </Style>
+            <HierarchicalDataTemplate DataType="{x:Type viewModel:FormsMenuVM}"
+                                      ItemsSource="{Binding Items}">
+                <TextBlock VerticalAlignment="Stretch"
+                           Text="{Binding Name}"
+                           Background="Transparent"
+                           Margin="3 2" />
+            </HierarchicalDataTemplate>
+            <DataTemplate DataType="{x:Type viewModel:FormVM}">
+                <TextBlock VerticalAlignment="Stretch"
+                           Background="Transparent"
+                           Text="{Binding Title}"
+                           Margin="3 2"
+                           ToolTip="{Binding Title}">
+
+                </TextBlock>
+
+            </DataTemplate>
+        </TreeView.Resources>
+    </TreeView>
+
+    <!--</ScrollViewer>-->
+
+</UserControl>

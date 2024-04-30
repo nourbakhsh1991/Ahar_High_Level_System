@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="AharHighLevel.View.MainModule.SptFc"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AharHighLevel.View.MainModule"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ge="clr-namespace:SourceChord.GridExtra;assembly=GridExtra.Wpf"
+             xmlns:interactionRequest="http://prismlibrary.com/"
+             mc:Ignorable="d"
+             Height="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},Path=ActualHeight}"
+             Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},Path=ActualWidth}">
+    <i:Interaction.Triggers>
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding CustomPopupRequest}">
+            <interactionRequest:PopupWindowAction IsModal="True"
+                                                  CenterOverAssociatedObject="True"
+                                                  WindowStartupLocation="CenterScreen"
+                                                  WindowContent="{Binding PopupContent}">
+                <interactionRequest:PopupWindowAction.WindowStyle>
+                    <Style TargetType="{x:Type Window}">
+                        <Setter Property="ResizeMode"
+                                Value="NoResize"></Setter>
+                        <Setter Property="WindowStyle"
+                                Value="None"></Setter>
+                        <Setter Property="SizeToContent"
+                                Value="WidthAndHeight"></Setter>
+                    </Style>
+                </interactionRequest:PopupWindowAction.WindowStyle>
+
+            </interactionRequest:PopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
+    </i:Interaction.Triggers>
+    <ScrollViewer VerticalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center"
+                  Height="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualHeight}"
+                  Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualWidth}">
+        <!--<Viewbox  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualWidth}"
+                  MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualHeight}">-->
+            <ge:ResponsiveGrid>
+                <GroupBox Header="FCR Set Point"
+                      Margin="16"
+                      ge:ResponsiveGrid.XS="12"
+                      ge:ResponsiveGrid.SM="6"
+                      ge:ResponsiveGrid.LG="6"
+                      ge:ResponsiveGrid.MD="6"
+                      BorderBrush="{StaticResource InfoBrush}"
+                          BorderThickness="2"
+                          Style="{StaticResource MyGroupBox}">
+
+                    <UniformGrid Grid.Row="0"
+                               Margin="16"
+                             Name="Wrp1"
+                               SizeChanged="UG_OnSizeChanged"
+                             HorizontalAlignment="Stretch">
+
+                </UniformGrid>
+                </GroupBox>
+
+                <GroupBox Header="Setting"
+                          Margin="16"
+                      ge:ResponsiveGrid.XS="12"
+                          ge:ResponsiveGrid.SM="6"
+                          ge:ResponsiveGrid.LG="6"
+                          ge:ResponsiveGrid.MD="6"
+                      BorderBrush="{StaticResource InfoBrush}"
+                          BorderThickness="2"
+                          Style="{StaticResource MyGroupBox}">
+
+                    <UniformGrid Margin="16"
+                             Name="Wrp2"
+                             VerticalAlignment="Top"
+                             SizeChanged="UG_OnSizeChanged"
+                             HorizontalAlignment="Stretch">
+
+                </UniformGrid>
+                </GroupBox>
+
+                <GroupBox Header="Force Setpoint"
+                          Margin="16"
+                      ge:ResponsiveGrid.XS="12"
+                          ge:ResponsiveGrid.SM="12"
+                          ge:ResponsiveGrid.LG="12"
+                          ge:ResponsiveGrid.MD="12"
+                      BorderBrush="{StaticResource InfoBrush}"
+                          BorderThickness="2"
+                          Style="{StaticResource MyGroupBox}">
+
+                    <UniformGrid Margin="16"
+                             Name="Wrp3"
+                             SizeChanged="UG_OnSizeChanged"
+                             HorizontalAlignment="Stretch">
+
+                </UniformGrid>
+                </GroupBox>
+            
+
+                <GroupBox Header="Monitor"
+                          Margin="16"
+                      ge:ResponsiveGrid.XS="12"
+                          ge:ResponsiveGrid.SM="12"
+                          ge:ResponsiveGrid.LG="12"
+                          ge:ResponsiveGrid.MD="12"
+                      BorderBrush="{StaticResource InfoBrush}"
+                          BorderThickness="2"
+                          Style="{StaticResource MyGroupBox}">
+
+                    <UniformGrid Margin="16"
+                             Name="Wrp4"
+                             SizeChanged="UG_OnSizeChanged"
+                             HorizontalAlignment="Stretch">
+
+                    </UniformGrid>
+                </GroupBox>
+
+
+            </ge:ResponsiveGrid>
+                <!--</Viewbox>-->
+    </ScrollViewer>
+</UserControl>

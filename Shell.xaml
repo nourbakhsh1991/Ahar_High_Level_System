@@ -1,0 +1,824 @@
+﻿<Window x:Class="AharHighLevel.Shell"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AharHighLevel"
+        xmlns:regions="http://prismlibrary.com/"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        BorderThickness="2"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        Padding="0"
+        MinWidth="700"
+        Name="ShellWindow"
+        WindowStartupLocation="CenterScreen"
+        FontWeight="ExtraBold"
+        WindowState="Maximized"
+        Height="450"
+        Style="{StaticResource WindowStyle}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        Foreground="#282a36"
+        TextElement.FontSize="14"
+        BorderBrush="{StaticResource WindowsMenuGradientBrush}"
+        SourceInitialized="Window_SourceInitialized"
+        FontFamily="pack://application:,,,/Resources/#SF UI Display"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Width="800">
+    <i:Interaction.Triggers>
+
+        <regions:InteractionRequestTrigger SourceObject="{Binding CustomPopupRequest}">
+            <regions:PopupWindowAction IsModal="True"
+                                       CenterOverAssociatedObject="True"
+                                       WindowStartupLocation="CenterScreen"
+                                       WindowContent="{Binding PopupContent}">
+                <regions:PopupWindowAction.WindowStyle>
+                    <Style TargetType="{x:Type Window}">
+                        <Setter Property="ResizeMode"
+                                Value="NoResize"></Setter>
+                        <Setter Property="WindowStyle"
+                                Value="None"></Setter>
+                        <Setter Property="SizeToContent"
+                                Value="WidthAndHeight"></Setter>
+                    </Style>
+                </regions:PopupWindowAction.WindowStyle>
+
+            </regions:PopupWindowAction>
+        </regions:InteractionRequestTrigger>
+
+    </i:Interaction.Triggers>
+    <Window.InputBindings>
+        <KeyBinding Gesture="Alt+F4"
+                    Key="F4"
+                    Modifiers="Alt"
+                    Command="{Binding ExitCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+        <KeyBinding Gesture="Ctrl+N"
+                    Key="N"
+                    Modifiers="Ctrl"
+                    Command="{Binding NewProjectCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+        <KeyBinding Gesture="Ctrl+O"
+                    Key="O"
+                    Modifiers="Ctrl"
+                    Command="{Binding OpenProjectCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+        <KeyBinding Gesture="Ctrl+S"
+                    Key="S"
+                    Modifiers="Ctrl"
+                    Command="{Binding SaveProjectCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+        <KeyBinding Gesture="Ctrl+H"
+                    Key="H"
+                    Modifiers="Ctrl"
+                    Command="{Binding SaveAsProjectCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+        <KeyBinding Gesture="Escape"
+                    Key="Escape"
+                    Command="{Binding EscKeyCommand, Mode=OneWay}"
+                    CommandParameter="{Binding ElementName=ShellWindow}" />
+    </Window.InputBindings>
+
+    <materialDesign:DialogHost Identifier="RootDialog"
+                               IsOpen="{Binding IsDialogOpen}"
+                               DialogContent="{Binding DialogContent}"
+                               CloseOnClickAway="False">
+
+        <Grid Background="{StaticResource WindowBackground}"
+              Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30px" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0"
+                    Padding="10"
+                    BorderThickness="0 0 0 0"
+                    Grid.ColumnSpan="3"
+                    Background="{StaticResource WindowsMenuGradientBrush}">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5"
+                                      Direction="290"
+                                      ShadowDepth="2"
+                                      Color="Black"></DropShadowEffect>
+                </Border.Effect>
+                <Grid Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/Resources/Logo.png"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               Margin="16,0,0,0"></Image>
+                        <TextBlock Text="{Binding ElementName=ShellWindow, Path=Title}"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Margin="4,0,0,0"
+                                   Foreground="{StaticResource WindowBackground}"></TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right">
+                        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                                Click="MinimizeWindow"
+                                Width="24"
+                                Margin="0 0 8 0"
+                                Height="24"
+                                ToolTip="Exit">
+                            <materialDesign:PackIcon Kind="Minus"
+                                                     Height="16"
+                                                     Width="16" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                                Command="{Binding ExitCommand, Mode=OneWay}"
+                                CommandParameter="{Binding ElementName=ShellWindow}"
+                                Width="24"
+                                Margin="0 0 8 0"
+                                Height="24"
+                                ToolTip="Exit">
+                            <materialDesign:PackIcon Kind="Close"
+                                                     Height="16"
+                                                     Width="16" />
+                        </Button>
+
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+            <Border Height="1"
+                    Visibility="Collapsed"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    VerticalAlignment="Bottom">
+                <Border.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Color="{Binding Source={StaticResource AccentBaseColor},Converter={StaticResource ColorOpacityConverter}, ConverterParameter=.5}"
+                                      Offset="0"></GradientStop>
+                        <GradientStop Color="#00FFFFFF"
+                                      Offset=".5"></GradientStop>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <DockPanel Grid.ColumnSpan="3"
+                       Grid.Row="1"
+                       Grid.Column="0">
+                <Menu DockPanel.Dock="Top"
+                      Background="{StaticResource WindowsMenuGradientBrush}"
+                      Foreground="{StaticResource WindowBackground}">
+
+                    <MenuItem Header="_File">
+                        <MenuItem Header="New Project"
+                                  InputGestureText="Ctrl+N"
+                                  Command="{Binding NewProjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource project_newDrawingImage}" />
+                            </MenuItem.Icon>
+
+                        </MenuItem>
+                        <MenuItem Header="Open Project"
+                                  InputGestureText="Ctrl+O"
+                                  Command="{Binding OpenProjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource project_openDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Close Project"
+                                  InputGestureText="Ctrl+W"
+                                  Command="{Binding CloseProjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource project_closeDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="_Save"
+                                  InputGestureText="Ctrl+S"
+                                  Command="{Binding SaveProjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource project_saveDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Save As ..."
+                                  Command="{Binding SaveAsProjectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource project_saveAsDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Archive"
+                                  InputGestureText="Ctrl+Shift+A"
+                                  Command="{Binding ArchiveCommand}">
+
+                        </MenuItem>
+                        <MenuItem Header="History"
+                                  InputGestureText="Ctrl+H"
+                                  Command="{Binding HistoryCommand}">
+
+                        </MenuItem>
+                        <MenuItem Header="Recent Files"
+                                  ItemsSource="{Binding RecentFiles}">
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Setter Property="MenuItem.Header"
+                                            Value="{Binding}" />
+                                    <Setter Property="Height"
+                                            Value="40" />
+                                    <Setter Property="VerticalContentAlignment"
+                                            Value="Center" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center" />
+                                    <Setter Property="Command"
+                                            Value="{Binding ElementName=ShellWindow, Path=DataContext.OpenRecentCommand }" />
+                                    <Setter Property="CommandParameter"
+                                            Value="{Binding}" />
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                <Grid   Background="{TemplateBinding Background}"
+                                                        VerticalAlignment="Stretch"
+                                                        HorizontalAlignment="Stretch">
+
+                                                    <TextBlock  Margin="16 0"
+                                                                VerticalAlignment="Center" Text="{TemplateBinding Header}"/>
+
+                                                </Grid>
+                                            </ControlTemplate>
+
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsHighlighted"
+                                                 Value="True">
+
+                                            <Setter Property="Background"
+                                                    Value="{Binding Source={StaticResource WindowBackground},Converter={StaticResource BrushOpacityConverter},ConverterParameter=.2}"></Setter>
+
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                        </MenuItem>
+
+                        <MenuItem Header="_Exit"
+                                  InputGestureText="Alt+F4"
+                                  Command="{Binding ExitCommand, Mode=OneWay}"
+                                  CommandParameter="{Binding ElementName=ShellWindow}" />
+                    </MenuItem>
+                    <MenuItem Header="_View"
+                              Visibility="Collapsed">
+                        <MenuItem Header="Explorer Pane"
+                                  IsCheckable="True"
+                                  IsChecked="{Binding ExplorerPaneVisible}"
+                                  Command="{Binding ExplorerPaneCommand}">
+
+                        </MenuItem>
+                        <MenuItem Header="Information Bar"
+                                  IsChecked="{Binding InformationBarVisible}"
+                                  IsCheckable="True"
+                                  Command="{Binding InformationBarCommand}">
+
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Communication">
+                        <MenuItem Header="Connect"
+                                  Command="{Binding ConnectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource connectDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Disconnect"
+                                  Command="{Binding disconnectCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource disconnectDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Download"
+                                  Command="{Binding DownloadCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource form_downloadDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Upload"
+                                  Command="{Binding UploadCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource form_uploadDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Connection Setting"
+                                  Command="{Binding ChangeIpCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource changeIpDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Change Ahar Password"
+                                  Command="{Binding ChangePasswordCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource passwordDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Tools">
+                        <MenuItem Header="Send"
+                                  Command="{Binding SendDataCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource send_formDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding CopyRamToRomCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource copy_ram_to_romDrawingImage}" />
+                            </MenuItem.Icon>
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <Label VerticalContentAlignment="Center"
+                                           Margin="0"
+                                           Padding="0 0 16 0"
+                                           Foreground="{StaticResource WindowBackground}"
+                                           VerticalAlignment="Center">Copy RAM To ROM</Label>
+                                    <iconPacks:PackIconMaterial Width="16"
+                                                                Height="16"
+                                                                Kind="AlertCircle"
+                                                                VerticalContentAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Visibility="{Binding CopyRamToRomAlertVisibility,Converter={StaticResource BooleanToVisibilityConverter},ConverterParameter='CRTR'}"></iconPacks:PackIconMaterial>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+
+                        <MenuItem Header="View Sequence Of Alarms/Events"
+                                  Command="{Binding AlarmEventCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource alarmEventDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Print"
+                                  Command="{Binding PrintPageCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource printDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Print Preview"
+                                  Visibility="Collapsed"
+                                  Command="{Binding Run}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource printPreviewDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Compare Settings"
+                                  Command="{Binding CompareSettingsCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource compare_settingDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Reset Factory Setting"
+                                  Command="{Binding ResetFactoryCommand}">
+                            <MenuItem.Icon>
+                                <Image Width="16"
+                                       Source="{StaticResource reset_settingDrawingImage}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Help">
+                        <MenuItem Header="About"
+                                  IsEnabled="False"
+                                  Command="{Binding Run}">
+
+                        </MenuItem>
+                        <MenuItem Header="Project Information"
+                                  Visibility="Collapsed"
+                                  Command="{Binding ProjectInformationCommand}">
+
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+                <!--<Border DockPanel.Dock="Top"
+                        Background="{Binding Source={StaticResource TextBrush},ConverterParameter=.05,Converter={StaticResource BrushOpacityConverter}}"
+                        Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DockPanel}, Path=ActualWidth}">
+                    -->
+                <!--<Border.Effect>
+                        <DropShadowEffect BlurRadius="5"
+                                          Direction="290"
+                                          ShadowDepth="2"
+                                          Color="Black"></DropShadowEffect>
+                    </Border.Effect>-->
+                <!--
+                    <StackPanel Orientation="Horizontal"
+                                Height="40">
+                        <StackPanel.Effect>
+                            <DropShadowEffect BlurRadius="0"
+                                              Direction="290"
+                                              ShadowDepth="0"
+                                              Color="Black"></DropShadowEffect>
+                        </StackPanel.Effect>
+                        <Label VerticalAlignment="Center"
+                               Margin="32 0 8 0"
+                               HorizontalAlignment="Center">Ahar</Label>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+                        <Button Command="{Binding NewProjectCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="New Project">
+                            <Image Width="24"
+                                   Source="{StaticResource project_newDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding OpenProjectCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="OpenProject">
+                            <Image Width="24"
+                                   Source="{StaticResource project_openDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding SaveProjectCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Save">
+                            <Image Width="24"
+                                   Source="{StaticResource project_saveDrawingImage}" />
+                        </Button>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+                        <Button Command="{Binding PrintPageCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Print Preview">
+                            <Image Width="24"
+                                   Source="{StaticResource printDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding disconnectCommand}"
+                                Visibility="Collapsed"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Print">
+                            <Image Width="24"
+                                   Source="{StaticResource printPreviewDrawingImage}" />
+                        </Button>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+                        <Button Command="{Binding ConnectCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Connect">
+                            <Image Width="24"
+                                   Source="{StaticResource connectDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding disconnectCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Disconnect">
+                            <Image Width="24"
+                                   Source="{StaticResource disconnectDrawingImage}" />
+                        </Button>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+                        <Button Command="{Binding DownloadCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Download">
+                            <Image Width="24"
+                                   Source="{StaticResource form_downloadDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding UploadCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Upload">
+                            <Image Width="24"
+                                   Source="{StaticResource form_uploadDrawingImage}" />
+                        </Button>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+                        <Button Command="{Binding SendDataCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Send">
+                            <Image Width="24"
+                                   Source="{StaticResource send_formDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding CopyRamToRomCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding CopyRamToRomAlertVisibility,Converter={StaticResource BooleanToVisibilityReverseConverter},ConverterParameter='CRTR'}"
+                                ToolTip="Copy Ram To Rom">
+                            <Image Width="24"
+                                   Source="{StaticResource copy_ram_to_romDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding CopyRamToRomCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding CopyRamToRomAlertVisibility,Converter={StaticResource BooleanToVisibilityConverter},ConverterParameter='CRTR'}"
+                                ToolTip="Copy Ram To Rom">
+                            <Image Width="24"
+                                   Source="{StaticResource copy_ram_to_rom2DrawingImage}" />
+                        </Button>
+                        <Line X1="0"
+                              Y1="0"
+                              X2="0"
+                              Y2="40"
+                              StrokeDashArray="1 1"
+                              StrokeThickness="2"
+                              Stroke="{StaticResource TextBrush}"
+                              Margin="5" />
+
+                        <Button Command="{Binding CompareSettingsCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Compare Settings">
+                            <Image Width="24"
+                                   Source="{StaticResource compare_settingDrawingImage}" />
+
+                        </Button>
+                        <Button Command="{Binding ResetFactoryCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Reset Factory Setting">
+                            <Image Width="24"
+                                   Source="{StaticResource reset_settingDrawingImage}" />
+
+                        </Button>
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding ChartObjectsVisibility, Converter={StaticResource bool2VisibilityConverter}}"
+                                    Margin="0">
+                            <Line X1="0"
+                                  Y1="0"
+                                  X2="0"
+                                  Y2="40"
+                                  StrokeDashArray="1 1"
+                                  StrokeThickness="2"
+                                  Stroke="{StaticResource TextBrush}"
+                                  Margin="5" />
+                            <Button Command="{Binding StartLiveTrendCommand}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    ToolTip="Start Trend">
+                                <Image Width="24"
+                                       Source="{StaticResource startDrawingImage}" />
+
+                            </Button>
+                            <Button Command="{Binding StopLiveTrendCommand}"
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    ToolTip="Stop Trend">
+                                <Image Width="24"
+                                       Source="{StaticResource stopDrawingImage}" />
+
+                            </Button>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Border>-->
+                <ToolBarTray Background="#4b666e"
+                             
+                             Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DockPanel}, Path=ActualWidth}">
+                    <ToolBar Style="{DynamicResource MaterialDesignToolBar}"
+                             Background="#4b666e"
+                             Margin="0"
+                             Padding="0"
+                             HorizontalAlignment="Stretch"
+                             BorderThickness="0">
+                        <Label VerticalAlignment="Center"
+                               Margin="32 0 8 0"
+                               Foreground="{StaticResource WindowBackground}"
+                               HorizontalAlignment="Center">Ahar</Label>
+                        <Separator />
+                        <Button Command="{Binding NewProjectCommand}"
+                                ToolTip="New Project">
+                            <Image Width="24"
+                                   Source="{StaticResource project_newDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding OpenProjectCommand}"
+                                ToolTip="OpenProject">
+                            <Image Width="24"
+                                   Source="{StaticResource project_openDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding SaveProjectCommand}"
+                                ToolTip="Save">
+                            <Image Width="24"
+                                   Source="{StaticResource project_saveDrawingImage}" />
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding ConnectCommand}"
+                                ToolTip="Connect">
+                            <Image Width="24"
+                                   Source="{StaticResource connectDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding disconnectCommand}"
+                                ToolTip="Disconnect">
+                            <Image Width="24"
+                                   Source="{StaticResource disconnectDrawingImage}" />
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding DownloadCommand}"
+                                ToolTip="Download">
+                            <Image Width="32"
+                                   Margin="0 -4 0 0"
+                                   Source="{StaticResource form_downloadDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding UploadCommand}"
+                                ToolTip="Upload">
+                            <Image Width="32"
+                                   Margin="0 -4 0 0"
+                                   Source="{StaticResource form_uploadDrawingImage}" />
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding PrintPageCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                ToolTip="Print">
+                            <Image Width="24"
+                                   Source="{StaticResource printDrawingImage}" />
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding SendDataCommand}"
+                                ToolTip="Send">
+                            <Image Width="24"
+                                   Source="{StaticResource send_formDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding CopyRamToRomCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding CopyRamToRomAlertVisibility,Converter={StaticResource BooleanToVisibilityReverseConverter},ConverterParameter='CRTR'}"
+                                ToolTip="Copy Ram To Rom">
+                            <Image Width="24"
+                                   Source="{StaticResource copy_ram_to_romDrawingImage}" />
+                        </Button>
+                        <Button Command="{Binding CopyRamToRomCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding CopyRamToRomAlertVisibility,Converter={StaticResource BooleanToVisibilityConverter},ConverterParameter='CRTR'}"
+                                ToolTip="Copy Ram To Rom">
+                            <Image Width="24"
+                                   Source="{StaticResource copy_ram_to_rom2DrawingImage}" />
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding CompareSettingsCommand}"
+                                ToolTip="Compare Settings">
+                            <Image Width="24"
+                                   Source="{StaticResource compare_settingDrawingImage}" />
+
+                        </Button>
+                        <Button Command="{Binding ResetFactoryCommand}"
+                                ToolTip="Reset Factory Setting">
+                            <Image Width="24"
+                                   Source="{StaticResource reset_settingDrawingImage}" />
+
+                        </Button>
+                        <Separator />
+                        <Button Command="{Binding StartLiveTrendCommand}"
+                                Visibility="{Binding StartTrendVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                ToolTip="Start Trend">
+                            <Image Width="24"
+                                   Source="{StaticResource startDrawingImage}" />
+
+                        </Button>
+                        <Button Command="{Binding StopLiveTrendCommand}"
+                                Visibility="{Binding StopTrendVisibility,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                ToolTip="Stop Trend">
+                            <Image Width="24"
+                                   Source="{StaticResource stopDrawingImage}" />
+
+                        </Button>
+                        <Button Command="{Binding RefreshLoadCommand}"
+                               ToolTip="Refresh Load">
+                            <Image Width="24"
+                                   Source="{StaticResource SyncDrawingImage}" />
+
+                        </Button>
+                    </ToolBar>
+
+                </ToolBarTray>
+
+            </DockPanel>
+            <Border Grid.Row="1"
+                    BorderBrush="{StaticResource ControlBorderBrush}"
+                    BorderThickness="0,0,0,1"
+                    Grid.ColumnSpan="2"
+                    Name="TopGrid">
+                <ItemsControl Name="HeaderRegion"
+                              regions:RegionManager.RegionName="HeaderRegion"></ItemsControl>
+            </Border>
+            <Border BorderThickness="{Binding RightBorderThickness}"
+                    Visibility="{Binding RightBorderVisibility}"
+                    BorderBrush="{StaticResource ControlBorderBrush}"
+                    Grid.Row="2"
+                    Grid.Column="0">
+                <Expander ExpandDirection="Left"
+                          IsExpanded="True"
+                          BorderThickness="0"
+                          Background="#dde9ed"
+                          Name="Expand">
+
+                    <Expander.Header>
+                        <TextBlock Text="Project Explorer"
+                                   RenderTransformOrigin=".5,.5">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90" />
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Expander.Header>
+                    <StackPanel Orientation="Vertical"
+                                TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+
+                        <ItemsControl  Name="RightRegion"
+                                       Width="200"
+                                       Height="{Binding RelativeSource={RelativeSource AncestorType=Expander},Path=ActualHeight}"
+                                       regions:RegionManager.RegionName="RightRegion" />
+                    </StackPanel>
+                </Expander>
+            </Border>
+            <Grid Grid.Row="2"
+                  Name="LeftGrid"
+                  Grid.Column="2">
+                <!--<ScrollViewer VerticalAlignment="Stretch"
+                              VerticalScrollBarVisibility="Auto"
+                              VerticalContentAlignment="Center"
+                              HorizontalScrollBarVisibility="Disabled"
+                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Stretch"
+                              Margin="0">-->
+                <!--<Viewbox>-->
+
+                <ItemsControl Name="MainRegion"
+                              regions:RegionManager.RegionName="MainRegion"
+                              VerticalContentAlignment="Center"
+                              HorizontalContentAlignment="Center"></ItemsControl>
+
+                <!--</Viewbox>
+                 MinHeight="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualHeight,Converter={StaticResource DoubleAddConverter},ConverterParameter=-32}"
+                                  MinWidth="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth,Converter={StaticResource DoubleAddConverter},ConverterParameter=-32}"
+                                 
+                -->
+                <!--</ScrollViewer>-->
+            </Grid>
+            <Grid Grid.Column="0"
+                  Grid.Row="3"
+                  Margin="0"
+                  Visibility="{Binding BottomGridVisibility}"
+                  Grid.ColumnSpan="3">
+                <ItemsControl Padding="0"
+                              Margin="0"
+                              VerticalAlignment="Stretch"
+                              regions:RegionManager.RegionName="BottomRegion" />
+            </Grid>
+            <!--<GridSplitter Grid.Column="1"
+                          Grid.Row="2"
+                          Width="5"
+                          Visibility="{Binding RightBorderVisibility}"
+                          HorizontalAlignment="Stretch" />-->
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

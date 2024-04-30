@@ -1,0 +1,208 @@
+﻿<UserControl x:Class="AharHighLevel.View.MainModule.Form8"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AharHighLevel.View.MainModule"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactionRequest="http://prismlibrary.com/"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:gridExtra="clr-namespace:SourceChord.GridExtra;assembly=GridExtra.Wpf"
+             Height="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},Path=ActualHeight}"
+             Width="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},Path=ActualWidth}"
+             mc:Ignorable="d"
+             d:DesignHeight="800"
+             d:DesignWidth="800">
+    <i:Interaction.Triggers>
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding CustomPopupRequest}">
+            <interactionRequest:PopupWindowAction IsModal="True"
+                                                  CenterOverAssociatedObject="True"
+                                                  WindowStartupLocation="CenterScreen"
+                                                  WindowContent="{Binding PopupContent}">
+                <interactionRequest:PopupWindowAction.WindowStyle>
+                    <Style TargetType="{x:Type Window}">
+                        <Setter Property="ResizeMode"
+                                Value="NoResize"></Setter>
+                        <Setter Property="WindowStyle"
+                                Value="None"></Setter>
+                        <Setter Property="SizeToContent"
+                                Value="WidthAndHeight"></Setter>
+                    </Style>
+                </interactionRequest:PopupWindowAction.WindowStyle>
+
+            </interactionRequest:PopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
+    </i:Interaction.Triggers>
+    <dragablz:TabablzControl FontSize="18"
+                             SelectedIndex="{Binding SelectedTab}"
+                             Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualWidth}"
+                             Height="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=ActualHeight}">
+        <dragablz:TabablzControl.InterTabController>
+            <dragablz:InterTabController />
+        </dragablz:TabablzControl.InterTabController>
+        <TabItem Header="Form8-1">
+            <ScrollViewer VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          Width="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualWidth,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                          Height="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualHeight,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                          HorizontalScrollBarVisibility="Disabled">
+                <!--<Viewbox  VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                         MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualWidth,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                         MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualHeight,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}">-->
+                <gridExtra:ResponsiveGrid>
+                    <GroupBox Header="Form 8_1"
+                              Margin="16"
+                              gridExtra:ResponsiveGrid.XS="12"
+                              gridExtra:ResponsiveGrid.SM="12"
+                              gridExtra:ResponsiveGrid.LG="12"
+                              gridExtra:ResponsiveGrid.MD="12"
+                              BorderBrush="{StaticResource InfoBrush}"
+                              BorderThickness="2"
+                              Style="{StaticResource MyGroupBox}">
+                        <StackPanel>
+                            <UniformGrid Margin="16"
+                                         Name="Wrp1"
+                                         SizeChanged="UG_OnSizeChanged"
+                                         HorizontalAlignment="Stretch">
+
+                            </UniformGrid>
+                            <Button Margin="48 16"
+                                    FontSize="16"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding SendForm8_1}"
+                                    HorizontalAlignment="Left">
+                                Start
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox   gridExtra:ResponsiveGrid.XS="12"
+                                gridExtra:ResponsiveGrid.SM="6"
+                                gridExtra:ResponsiveGrid.LG="6"
+                                gridExtra:ResponsiveGrid.MD="6"
+                                Header="AI"
+                                Margin="16"
+                                BorderBrush="{StaticResource InfoBrush}"
+                                BorderThickness="2"
+                                Style="{StaticResource MyGroupBox}">
+                        <UniformGrid Grid.Row="4"
+                                     Grid.Column="0"
+                                     Margin="16"
+                                     Name="Wrp2"
+                                     SizeChanged="UG_OnSizeChanged"
+                                     HorizontalAlignment="Stretch">
+
+                        </UniformGrid>
+                    </GroupBox>
+                    <GroupBox    gridExtra:ResponsiveGrid.XS="12"
+                                 gridExtra:ResponsiveGrid.SM="6"
+                                 gridExtra:ResponsiveGrid.LG="6"
+                                 gridExtra:ResponsiveGrid.MD="6"
+                                 Header="AO"
+                                 Margin="16"
+                                 BorderBrush="{StaticResource InfoBrush}"
+                                 BorderThickness="2"
+                                 Style="{StaticResource MyGroupBox}">
+                        <UniformGrid Grid.Row="4"
+                                     Grid.Column="1"
+                                     Margin="16"
+                                     Name="Wrp3"
+                                     SizeChanged="UG_OnSizeChanged"
+                                     HorizontalAlignment="Stretch">
+
+                        </UniformGrid>
+                    </GroupBox>
+                    <GroupBox   gridExtra:ResponsiveGrid.XS="12"
+                                gridExtra:ResponsiveGrid.SM="12"
+                                gridExtra:ResponsiveGrid.LG="12"
+                                gridExtra:ResponsiveGrid.MD="12"
+                                Header="AC"
+                                Margin="16"
+                                BorderBrush="{StaticResource InfoBrush}"
+                                BorderThickness="2"
+                                Style="{StaticResource MyGroupBox}">
+                        <UniformGrid Margin="16"
+                                     Name="Wrp4"
+                                     SizeChanged="UG_OnSizeChanged"
+                                     HorizontalAlignment="Stretch">
+
+                        </UniformGrid>
+                    </GroupBox>
+
+                </gridExtra:ResponsiveGrid>
+                <!--</Viewbox>-->
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Form8-2">
+            <ScrollViewer VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          Width="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualWidth,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                          Height="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualHeight,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                          HorizontalScrollBarVisibility="Disabled">
+                <!--<Viewbox  VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualWidth,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}"
+                          MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=dragablz:TabablzControl},Path=ActualHeight,Converter={StaticResource DoubleAddConverter},ConverterParameter=-40}">-->
+
+                <gridExtra:ResponsiveGrid>
+                    <GroupBox Header="Form 8_2"
+                              Margin="16"
+                              gridExtra:ResponsiveGrid.XS="12"
+                              gridExtra:ResponsiveGrid.SM="12"
+                              gridExtra:ResponsiveGrid.LG="12"
+                              gridExtra:ResponsiveGrid.MD="12"
+                              BorderBrush="{StaticResource InfoBrush}"
+                              BorderThickness="2"
+                              Style="{StaticResource MyGroupBox}">
+                        <StackPanel>
+                            <UniformGrid Margin="16"
+                                         Name="Wrp5"
+                                         SizeChanged="UG_OnSizeChanged"
+                                         HorizontalAlignment="Stretch">
+
+                            </UniformGrid>
+                            <Button Margin="48 16"
+                                    FontSize="16"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding SendForm8_2}"
+                                    HorizontalAlignment="Left">
+                                Start
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+
+
+                    <GroupBox Header="FB"
+                              gridExtra:ResponsiveGrid.XS="12"
+                              gridExtra:ResponsiveGrid.SM="12"
+                              gridExtra:ResponsiveGrid.LG="12"
+                              gridExtra:ResponsiveGrid.MD="12"
+                              Margin="16"
+                              BorderBrush="{StaticResource InfoBrush}"
+                              BorderThickness="2"
+                              Style="{StaticResource MyGroupBox}">
+
+                        <UniformGrid Grid.Row="1"
+                                     Margin="16"
+                                     Name="Wrp6"
+                                     SizeChanged="UG_OnSizeChanged"
+                                     HorizontalAlignment="Stretch">
+
+                        </UniformGrid>
+                    </GroupBox>
+
+                </gridExtra:ResponsiveGrid>
+                <!--</Viewbox>-->
+            </ScrollViewer>
+        </TabItem>
+    </dragablz:TabablzControl>
+
+</UserControl>

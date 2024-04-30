@@ -1,0 +1,182 @@
+﻿<UserControl x:Class="AharHighLevel.View.Modals.MessageBoxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AharHighLevel.View.Modals"
+             xmlns:types="clr-namespace:AharHighLevel.Common"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactionRequest="http://prismlibrary.com/"
+             mc:Ignorable="d"
+             BorderBrush="{StaticResource TextBrush}"
+             BorderThickness="1"
+             Width="Auto"
+             MaxWidth="700"
+             Height="Auto">
+    <i:Interaction.Triggers>
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding CustomPopupRequest}">
+            <interactionRequest:PopupWindowAction IsModal="True"
+                                                  CenterOverAssociatedObject="True"
+                                                  WindowStartupLocation="CenterScreen"
+                                                  WindowContent="{Binding PopupContent}">
+                <interactionRequest:PopupWindowAction.WindowStyle>
+                    <Style TargetType="{x:Type Window}">
+                        <Setter Property="ResizeMode"
+                                Value="NoResize"></Setter>
+                        <Setter Property="WindowStyle"
+                                Value="None"></Setter>
+                        <Setter Property="SizeToContent"
+                                Value="WidthAndHeight"></Setter>
+                    </Style>
+                </interactionRequest:PopupWindowAction.WindowStyle>
+
+            </interactionRequest:PopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Grid.Row="0"
+                                  MouseDown="UIElement_OnMouseDown"
+                                  Mode="PrimaryMid"
+                                  Height="30">
+            <TextBlock Margin="32 0"
+                       FontSize="20"
+                       VerticalAlignment="Center"
+                       Text="{Binding Caption}"></TextBlock>
+        </materialDesign:ColorZone>
+        <!--<Image Width="64"
+               Grid.Column="0"
+               Grid.Row="2"
+               Margin="32 32 32 8"
+               Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Loading}}"
+               RenderTransformOrigin=".5,.5"
+               Source="{StaticResource loadingDrawingImage}">
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Image.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             From="0"
+                                             To="360"
+                                             BeginTime="00:00:00.000"
+                                             Duration="00:00:01.000"
+                                             RepeatBehavior="Forever">
+                                <DoubleAnimation.EasingFunction>
+                                    <SineEase EasingMode="EaseInOut" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
+            <Image.RenderTransform>
+                <RotateTransform Angle="0" />
+            </Image.RenderTransform>
+        </Image>-->
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Value="0"
+                     Width="64"
+                     Grid.Column="0"
+                     Grid.Row="1"
+                     Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Loading}}"
+                     Margin="32 32 32 48"
+                     IsIndeterminate="True" />
+        <Image Width="64"
+               Grid.Row="1"
+               Grid.Column="0"
+               Margin="32 32 32 8"
+               Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Error}}"
+               RenderTransformOrigin=".5,.5"
+               Source="{StaticResource ErrorDrawingImage}">
+
+        </Image>
+        <Image Width="64"
+               Grid.Row="1"
+               Grid.Column="0"
+               Margin="32 32 32 8"
+               Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Warning}}"
+               RenderTransformOrigin=".5,.5"
+               Source="{StaticResource WarningDrawingImage}">
+
+        </Image>
+        <Image Width="64"
+               Grid.Row="1"
+               Grid.Column="0"
+               Margin="32 32 32 8"
+               Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Information}}"
+               RenderTransformOrigin=".5,.5"
+               Source="{StaticResource InformationDrawingImage}">
+
+        </Image>
+        <Image Width="64"
+               Grid.Row="1"
+               Grid.Column="0"
+               Margin="32 32 32 8"
+               Visibility="{Binding Type, Converter={StaticResource MessageBoxTypeConverter}, ConverterParameter={x:Static types:MessageBoxTypes.Ok}}"
+               RenderTransformOrigin=".5,.5"
+               Source="{StaticResource OkDrawingImage}">
+
+        </Image>
+
+        <TextBlock Grid.Column="0"
+                   Grid.Row="2"
+                   Padding="16"
+                   Style="{StaticResource H5}"
+                   VerticalAlignment="Stretch"
+                   HorizontalAlignment="Stretch"
+                   TextWrapping="Wrap"
+                   MinWidth="260"
+                   MaxWidth="600"
+                   Text="{Binding Message}"
+                   TextAlignment="Center">
+        </TextBlock>
+        <StackPanel Grid.Column="0"
+                    Grid.Row="3"
+                    Margin="16"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Orientation="Horizontal">
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="8"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Visibility="{Binding Buttons,Converter={StaticResource MessageBoxButtonConverter}, ConverterParameter={x:Static types:MessageBoxButtons.Ok}}"
+                    Command="{Binding OkCommand}"
+                    Width="100">
+                Ok
+            </Button>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Margin="8"
+                    Visibility="{Binding Buttons,Converter={StaticResource MessageBoxButtonConverter}, ConverterParameter={x:Static types:MessageBoxButtons.Yes}}"
+                    Command="{Binding YesCommand}"
+                    Width="100">
+                Yes
+            </Button>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    Visibility="{Binding Buttons,Converter={StaticResource MessageBoxButtonConverter}, ConverterParameter={x:Static types:MessageBoxButtons.No}}"
+                    Command="{Binding NoCommand}"
+                    Margin="8"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Width="100">
+                No
+            </Button>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                    Visibility="{Binding Buttons,Converter={StaticResource MessageBoxButtonConverter}, ConverterParameter={x:Static types:MessageBoxButtons.Cancel}}"
+                    Command="{Binding CancelCommand}"
+                    Margin="8"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Width="100">
+                Cancel
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

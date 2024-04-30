@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AharDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Forms">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="500" />
+          <Property Name="csd" Type="int" />
+          <Property Name="title" Type="nvarchar" MaxLength="500" />
+          <Property Name="parentId" Type="int" />
+        </EntityType>
+        <EntityType Name="Parameters">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="tinyint" />
+          <Property Name="readOnly" Type="bit" />
+          <Property Name="label" Type="nvarchar" MaxLength="500" />
+          <Property Name="unit" Type="nvarchar" MaxLength="10" />
+          <Property Name="changeInRunMode" Type="bit" />
+          <Property Name="value" Type="varchar" MaxLength="20" />
+          <Property Name="packetNumber" Type="int" />
+          <Property Name="packetIndex" Type="int" />
+          <Property Name="packetBitIndex" Type="int" />
+          <Property Name="Resolution" Type="decimal" Precision="9" Scale="8" />
+          <Property Name="hasMinMax" Type="bit" />
+          <Property Name="min" Type="nvarchar" MaxLength="20" />
+          <Property Name="max" Type="nvarchar" MaxLength="20" />
+          <Property Name="formId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Forms_Forms">
+          <End Role="Forms" Type="Self.Forms" Multiplicity="0..1" />
+          <End Role="Forms1" Type="Self.Forms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forms1">
+              <PropertyRef Name="parentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Parameters_Forms">
+          <End Role="Forms" Type="Self.Forms" Multiplicity="0..1" />
+          <End Role="Parameters" Type="Self.Parameters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Parameters">
+              <PropertyRef Name="formId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AharDbModelStoreContainer">
+          <EntitySet Name="Forms" EntityType="Self.Forms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parameters" EntityType="Self.Parameters" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Forms_Forms" Association="Self.FK_Forms_Forms">
+            <End Role="Forms" EntitySet="Forms" />
+            <End Role="Forms1" EntitySet="Forms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parameters_Forms" Association="Self.FK_Parameters_Forms">
+            <End Role="Forms" EntitySet="Forms" />
+            <End Role="Parameters" EntitySet="Parameters" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AharDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="csd" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="parentId" Type="Int32" />
+          <NavigationProperty Name="Childeren" Relationship="Self.FK_Forms_Forms" FromRole="Forms" ToRole="Forms1" />
+          <NavigationProperty Name="Parent" Relationship="Self.FK_Forms_Forms" FromRole="Forms1" ToRole="Forms" />
+          <NavigationProperty Name="Parameters" Relationship="AharDbModel.FK_Parameters_Forms" FromRole="Form" ToRole="Parameter" />
+        </EntityType>
+        <Association Name="FK_Forms_Forms">
+          <End Role="Forms" Type="Self.Form" Multiplicity="0..1" />
+          <End Role="Forms1" Type="Self.Form" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Forms">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Forms1">
+              <PropertyRef Name="parentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AharDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Forms" EntityType="Self.Form" />
+          <AssociationSet Name="FK_Forms_Forms" Association="Self.FK_Forms_Forms">
+            <End Role="Forms" EntitySet="Forms" />
+            <End Role="Forms1" EntitySet="Forms" />
+          </AssociationSet>
+          <EntitySet Name="Parameters" EntityType="AharDbModel.Parameter" />
+          <AssociationSet Name="FK_Parameters_Forms" Association="AharDbModel.FK_Parameters_Forms">
+            <End Role="Form" EntitySet="Forms" />
+            <End Role="Parameter" EntitySet="Parameters" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="Byte" />
+          <Property Name="readOnly" Type="Boolean" />
+          <Property Name="label" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="unit" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="changeInRunMode" Type="Boolean" />
+          <Property Name="value" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="packetNumber" Type="Int32" />
+          <Property Name="packetIndex" Type="Int32" />
+          <Property Name="packetBitIndex" Type="Int32" />
+          <Property Name="Resolution" Type="Decimal" Precision="9" Scale="8" />
+          <Property Name="hasMinMax" Type="Boolean" />
+          <Property Name="min" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="max" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="formId" Type="Int32" />
+          <NavigationProperty Name="Form" Relationship="AharDbModel.FK_Parameters_Forms" FromRole="Parameter" ToRole="Form" />
+        </EntityType>
+        <Association Name="FK_Parameters_Forms">
+          <End Type="AharDbModel.Form" Role="Form" Multiplicity="0..1" />
+          <End Type="AharDbModel.Parameter" Role="Parameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Form">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Parameter">
+              <PropertyRef Name="formId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AharDbModelStoreContainer" CdmEntityContainer="AharDbEntities">
+          <EntitySetMapping Name="Forms">
+            <EntityTypeMapping TypeName="AharDbModel.Form">
+              <MappingFragment StoreEntitySet="Forms">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="csd" ColumnName="csd" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="parentId" ColumnName="parentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Parameters">
+            <EntityTypeMapping TypeName="AharDbModel.Parameter">
+              <MappingFragment StoreEntitySet="Parameters">
+                <ScalarProperty Name="formId" ColumnName="formId" />
+                <ScalarProperty Name="max" ColumnName="max" />
+                <ScalarProperty Name="min" ColumnName="min" />
+                <ScalarProperty Name="hasMinMax" ColumnName="hasMinMax" />
+                <ScalarProperty Name="Resolution" ColumnName="Resolution" />
+                <ScalarProperty Name="packetBitIndex" ColumnName="packetBitIndex" />
+                <ScalarProperty Name="packetIndex" ColumnName="packetIndex" />
+                <ScalarProperty Name="packetNumber" ColumnName="packetNumber" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="changeInRunMode" ColumnName="changeInRunMode" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="label" ColumnName="label" />
+                <ScalarProperty Name="readOnly" ColumnName="readOnly" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
